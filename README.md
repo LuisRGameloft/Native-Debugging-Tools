@@ -1,13 +1,13 @@
 ### Native-Debugging-Tools for Android
 
-##### app
- fuente de la aplicacion dummy que contiene los binarios: gdbserver, simpleperf, etc.
+##### NativeDebuggerTools
+ Aplicacion dummy que contiene los binarios: gdbserver, simpleperf, etc.
 
-#### ndt-launcher
-Archivos cpp y .h que deben ser incluidos en el proyecto que se desea depurar
+#### InAppRemoteShell
+Archivos cpp y .hpp que deben ser incluidos en el proyecto que se desea depurar
 
 #### scripts
-scripts para iniciar la depuracion o cualquier otra caracteristica integrada
+Scripts para depurar o hacer profiling.
 
 #### example
-aplicacion de ejemplo que implementa Native-Debugging-Tools
+Aplicacion de ejemplo que implementa InAppRemoteShell y que por lo tanto se pueden utlizar las debugging tools
