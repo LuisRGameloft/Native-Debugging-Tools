@@ -91,7 +91,8 @@ obj/local/armeabi-v7a/objs/Native/./native.o: jni/./native.cpp \
  C:\Users\david.landeros\Documents\Visual\ Studio\ 2012\Projects\common-libraries/glm/glm/gtx/transform.inl \
  jni/Monkey.hpp jni/Drawables/Drawable.hpp \
  jni/ShaderProgram/ShaderProgram.hpp jni/Utils/gl.h \
- jni/ModelLoader/ModelLoader.hpp
+ jni/ModelLoader/ModelLoader.hpp jni/./../../ndt-launcher/NDTLauncher.hpp \
+ C:/android/android-ndk-r12b/build//../sources/cxx-stl/gnu-libstdc++/4.9/include/string
 
 jni/./Native.hpp:
 
@@ -286,3 +287,7 @@ jni/ShaderProgram/ShaderProgram.hpp:
 jni/Utils/gl.h:
 
 jni/ModelLoader/ModelLoader.hpp:
+
+jni/./../../ndt-launcher/NDTLauncher.hpp:
+
+C:/android/android-ndk-r12b/build//../sources/cxx-stl/gnu-libstdc++/4.9/include/string:

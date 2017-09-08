@@ -108,7 +108,7 @@
 
 
 
-
+#include "../../InAppRemoteShell/InAppRemoteShell.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 // JNI FUNCTIONS, DO NOT TOUCH
@@ -127,4 +127,15 @@ void JNICALL Java_com_example_openglapp2_Native_update(JNIEnv *env, jclass jclas
 JNIEXPORT
 void JNICALL Java_com_example_openglapp2_Native_resize(JNIEnv *env, jclass jclass1, jint width, jint height) {
     glViewport(0, 0, width, height);
+}
+
+extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
+{
+	InAppRemoteShell::Init();
+    JNIEnv* env;
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+        return -1;
+    }
+
+    return JNI_VERSION_1_6;
 }

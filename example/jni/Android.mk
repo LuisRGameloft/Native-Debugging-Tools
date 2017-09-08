@@ -17,10 +17,11 @@ LOCAL_SRC_FILES     := ./native.cpp\
                     ./ModelLoader/PLYLoader.cpp\
                     ./ModelLoader/ModelLoader.cpp\
                     ./InputManager/InputManager.cpp\
-                    ./Camera/Camera.cpp
+                    ./Camera/Camera.cpp\
+                    ../../InAppRemoteShell/InAppRemoteShell.cpp
 LOCAL_CFLAGS        += -I $(LOCAL_PATH)
 LOCAL_CFLAGS        += -I "$(CC_COMMON_LIBS)/glm"
-LOCAL_CFLAGS        += -DOS_ANDROID -DANDROID
+LOCAL_CFLAGS        += -DOS_ANDROID -DANDROID -Wno-write-strings
 LOCAL_CFLAGS        += -Wno-int-to-pointer-cast
 LOCAL_CPPFLAGS      += -fno-rtti -fno-exceptions -std=c++11 -g
 LOCAL_CFLAGS        += -fno-rtti -fno-exceptions -std=c++11 -g
