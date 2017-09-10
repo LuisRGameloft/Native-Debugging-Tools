@@ -87,6 +87,7 @@ void *InAppRemoteShell::StartService(void*args)
         int no_events = select(FD_SETSIZE, &readset, NULL, NULL, NULL);
         if(FD_ISSET(server_fd, &readset))
         {
+            REMOTE_SHELL_LOG("New client connected\n" );
         	client_fd = accept(server_fd, NULL, NULL);
         	send(client_fd, "welcome to in-app-remote-shell\r\n", 32, 0);
         }
@@ -95,7 +96,9 @@ void *InAppRemoteShell::StartService(void*args)
         	char buffer[1024];
         	int len = recv(client_fd, buffer, sizeof buffer-1, 0);
     	    if(len < 1) {
+                REMOTE_SHELL_LOG("Client disconnected\n" );
     	    	client_fd = 0;
+                continue;
     	    }
         	buffer[1023] = 0x00;
     	    std::string cmd(buffer);
