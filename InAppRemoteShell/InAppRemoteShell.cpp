@@ -48,26 +48,26 @@ void InAppRemoteShell::Init()
     FILE *pFile = fopen("/sdcard/commands.txt", "r");
     if(pFile)
     {
-    	char c_str_cmd[500];
-    	int r = 1;
-    	while(r != 0)
-    	{
-    	    r = fscanf(pFile, "%99[^\n]", c_str_cmd);
-    	    if(r != 0)
-    	    {
-    	    	std::string cmd(c_str_cmd);
-    	    	Exec(PreprocessCommand(cmd).c_str());
-    	    }
+        char c_str_cmd[500];
+        int r = 1;
+        while(r != 0)
+        {
+            r = fscanf(pFile, "%99[^\n]", c_str_cmd);
+            if(r != 0)
+            {
+                std::string cmd(c_str_cmd);
+                Exec(PreprocessCommand(cmd).c_str());
+            }
         }
-    	fclose(pFile);
+        fclose(pFile);
     }
-	pthread_t thread;
-	pthread_create(&thread, NULL, StartService, NULL);
+    pthread_t thread;
+    pthread_create(&thread, NULL, StartService, NULL);
 }
 
 void *InAppRemoteShell::StartService(void*args)
 {
-	int client_fd = 0;
+    int client_fd = 0;
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
     sockaddr_in listener;
     listener.sin_family = AF_INET;
@@ -77,7 +77,7 @@ void *InAppRemoteShell::StartService(void*args)
     listen(server_fd, SOMAXCONN);
     while(true)
     {
-    	fd_set readset;
+        fd_set readset;
         FD_ZERO(&readset);
         FD_SET(server_fd, &readset);
         if(client_fd != 0)
@@ -88,41 +88,41 @@ void *InAppRemoteShell::StartService(void*args)
         if(FD_ISSET(server_fd, &readset))
         {
             REMOTE_SHELL_LOG("New client connected\n" );
-        	client_fd = accept(server_fd, NULL, NULL);
-        	send(client_fd, "welcome to in-app-remote-shell\r\n", 32, 0);
+            client_fd = accept(server_fd, NULL, NULL);
+            send(client_fd, "welcome to in-app-remote-shell\r\n", 32, 0);
         }
         else if(FD_ISSET(client_fd, &readset))
         {
-        	char buffer[1024];
-        	int len = recv(client_fd, buffer, sizeof buffer-1, 0);
-    	    if(len < 1) {
+            char buffer[1024];
+            int len = recv(client_fd, buffer, sizeof buffer-1, 0);
+            if(len < 1) {
                 REMOTE_SHELL_LOG("Client disconnected\n" );
-    	    	client_fd = 0;
+                client_fd = 0;
                 continue;
-    	    }
-        	buffer[1023] = 0x00;
-    	    std::string cmd(buffer);
-    	    Exec(PreprocessCommand(cmd).c_str());
-    	    send(client_fd, "done\r\n", 6, 0);
+            }
+            buffer[1023] = 0x00;
+            std::string cmd(buffer);
+            Exec(PreprocessCommand(cmd).c_str());
+            send(client_fd, "done\r\n", 6, 0);
         }
     }
 }
 
 std::string& InAppRemoteShell::PreprocessCommand(std::string& cmd)
 {
-	size_t pos = cmd.find("{PID}");
-	if(pos != std::string::npos)
-	{
-		cmd.replace(pos, 5, s_sPid);
-	}
+    size_t pos = cmd.find("{PID}");
+    if(pos != std::string::npos)
+    {
+        cmd.replace(pos, 5, s_sPid);
+    }
     REMOTE_SHELL_LOG(">>> %s",cmd.c_str());
-	return cmd.append(" 2>&1");
+    return cmd.append(" 2>&1");
 }
 
 void InAppRemoteShell::Exec(const char *cmd)
 {
-	if (fork() == 0)
-	{
+    if (fork() == 0)
+    {
         FILE *fp;
         char path[1035];
         fp = popen(cmd, "r");
