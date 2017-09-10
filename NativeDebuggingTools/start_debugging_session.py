@@ -138,44 +138,44 @@ print "\r\n"
 ensureAdbIsReady();
 system("adb forward tcp:12345 tcp:12345");
 
-print " [-] Checking whether device is connected"
+print " [+] Checking whether device is connected"
 if not isDeviceConnected() :
 	print "Error: device disconnected!"
 	sys.exit(0);
 
-print " [-] Checking whether application is debuggable"
+print " [+] Checking whether application is debuggable"
 if not adbIsDebuggable(package_name):
 	print "\r\n   Error: application is not debuggable"
 	sys.exit(0);
 
-print " [-] Checking whether native debugging tools are installed"
+print " [+] Checking whether native debugging tools are installed"
 ndt_path = findNdtPath()
 if len(ndt_path) is 0:
-    print "    - Installing Native Debugging tools..."
+    print "   [+] Installing Native Debugging tools..."
     system("adb install -r -d ./device/native-debugging-tools.apk")
     ndt_path = findNdtPath()
     if len(ndt_path) is 0:
         print "Installation failed"
         sys.exit(0);
-print "    - Installation found : " + ndt_path
+print "   [+] Installation found : " + ndt_path
 
-print " [-] Checking whether application is running "
+print " [+] Checking whether application is running "
 pid = adbPidOf(package_name)
 if pid == None:
-    print "   - Application is not running (debug from start)"
+    print "  [+] Application is not running (debug from start)"
     start_app = True
 else:
-	print "   - Pid: " + pid
+	print "  [+] Pid: " + pid
 
 if start_app :
-    print "   [-] Creating commands.txt into the device"
+    print "   [+] Creating commands.txt into the device"
     print "\r\n     IMPORTANT NOTE: It only works if the applications implements InAppRemoteShell"
     adbCreateFile("/sdcard/commands.txt", ndt_path + "gdbserver.so :12345 --attach {PID}")
     adbRunApp(package_name, main_activity);
     time.sleep(2);
     adbDeleteFile("/sdcard/commands.txt");
 else :
-    print " [-] Connecting to remote process"
+    print " [+] Connecting to remote process"
     system("adb forward tcp:3435 tcp:3435");
     s = None
     try :
@@ -183,8 +183,8 @@ else :
         s.connect(("127.0.0.1", 3435))
         data = s.recv(1024)
         if "in-app-remote-shell" in data:
-            print "    [-] Connection succeed"
-            print "    - Attaching debugger"
+            print "    [+] Connection succeed"
+            print "   [+] Attaching debugger"
             s.send( ndt_path + "gdbserver.so :12345 --attach {PID}")
             time.sleep(1);
             s.close();
@@ -199,7 +199,7 @@ else :
         exit(1)
 
 #  creating commands.txt file for gdb client 
-print " [-] Creating configuration for Gdb client"
+print " [+] Creating configuration for Gdb client"
 if isDeviceX86() :
     os.chdir(shared_library_dir + "/x86/")
 else:
@@ -220,14 +220,14 @@ commands_file.write("handle SIG33 nostop \r\n");
 commands_file.write("handle SIG33 noprint \r\n");
 commands_file.close();
 
-print " - Pulling required files from device"
+print "[+] Pulling required files from device"
 if isDeviceConnected() :
     if adbFileExists("/system/bin/app_process32"):
         adbPullFile("/system/bin/app_process32", "app_process32")
     elif adbFileExists("/system/bin/app_process"):
         adbPullFile("/system/bin/app_process", "app_process32")
 else :
-    print "    - Error: device disconnected!, please reconnect it and try it again"
+    print "   [+] Error: device disconnected!, please reconnect it and try it again"
     sys.exit(0)
 
 try:
