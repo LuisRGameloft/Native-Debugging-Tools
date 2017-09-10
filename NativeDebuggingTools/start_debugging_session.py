@@ -136,12 +136,12 @@ print "    Gdb executable        : " + android_ndk_gdb
 print "\r\n"
 
 ensureAdbIsReady();
-system("adb forward tcp:12345 tcp:12345");
 
 print " [+] Checking whether device is connected"
 if not isDeviceConnected() :
     print "Error: device disconnected!"
     sys.exit(0);
+system("adb forward tcp:12345 tcp:12345");
 
 print " [+] Checking whether application is debuggable"
 if not adbIsDebuggable(package_name):
