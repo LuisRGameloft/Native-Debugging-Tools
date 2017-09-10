@@ -127,10 +127,10 @@ void InAppRemoteShell::Exec(const char *cmd)
         char path[1035];
         fp = popen(cmd, "r");
         if (fp == NULL) {
-          REMOTE_SHELL_LOG("Failed to run command\n" );
+            REMOTE_SHELL_LOG("Failed to run command\n" );
         }
         while (fgets(path, sizeof(path)-1, fp) != NULL) {
-          REMOTE_SHELL_LOG("%s", path);
+            REMOTE_SHELL_LOG("%s", path);
         }
         pclose(fp);
         exit(0); // exit child process

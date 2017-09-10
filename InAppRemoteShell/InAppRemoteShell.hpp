@@ -25,7 +25,7 @@
 class InAppRemoteShell
 {
     public:
- 	    static void Init();
+        static void Init();
     private:
         static int s_iPort;
         static char s_sPid[10];
