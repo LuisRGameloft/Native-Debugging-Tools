@@ -24,7 +24,7 @@ LOCAL_CFLAGS        += -I "$(CC_COMMON_LIBS)/glm"
 LOCAL_CFLAGS        += -DOS_ANDROID -DANDROID -Wno-write-strings
 LOCAL_CFLAGS        += -Wno-int-to-pointer-cast
 LOCAL_CPPFLAGS      += -fno-rtti -fno-exceptions -std=c++11 -g
-LOCAL_CFLAGS        += -fno-rtti -fno-exceptions -std=c++11 -g
+LOCAL_CFLAGS        += -fno-rtti -fno-exceptions -std=c++11 -g -fno-omit-frame-pointer
 LOCAL_LDLIBS        += -lGLESv3 -lEGL -llog
 NDK_TOOLCHAIN_VERSION := clang
 include $(BUILD_SHARED_LIBRARY)

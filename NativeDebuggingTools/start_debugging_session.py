@@ -157,18 +157,18 @@ if len(ndt_path) is 0:
     if len(ndt_path) is 0:
         print "Installation failed"
         sys.exit(0);
-print "   [+] Installation found : " + ndt_path
+print "     Installation found : " + ndt_path
 
 print " [+] Checking whether application is running "
 pid = adbPidOf(package_name)
 if pid == None:
-    print "  [+] Application is not running (debug from start)"
+    print "     Application is not running (debug from start)"
     start_app = True
 else:
-    print "  [+] Pid: " + pid
+    print "     Pid: " + pid
 
 if start_app :
-    print "   [+] Creating commands.txt into the device"
+    print "     Creating commands.txt into the device"
     print "\r\n     IMPORTANT NOTE: It only works if the applications implements InAppRemoteShell"
     adbCreateFile("/sdcard/commands.txt", ndt_path + "gdbserver.so :12345 --attach {PID}")
     adbRunApp(package_name, main_activity);
@@ -183,8 +183,8 @@ else :
         s.connect(("127.0.0.1", 3435))
         data = s.recv(1024)
         if "in-app-remote-shell" in data:
-            print "    [+] Connection succeed"
-            print "   [+] Attaching debugger"
+            print "     Connection succeed"
+            print "     Attaching debugger"
             s.send( ndt_path + "gdbserver.so :12345 --attach {PID}")
             time.sleep(1);
             s.close();
@@ -218,9 +218,15 @@ commands_file.write("file app_process32 \r\n");
 commands_file.write("target remote:12345 \r\n");
 commands_file.write("handle SIG33 nostop \r\n");
 commands_file.write("handle SIG33 noprint \r\n");
+commands_file.write("shell cls\r\n");
+commands_file.write("shell echo.\r\n");
+commands_file.write("shell echo         Welcome to the GNU Project Debugger\r\n");
+commands_file.write("shell echo         you are debugging: " + package_name + "\r\n");
+commands_file.write("shell echo         type 'help' for a list of gdb commands\r\n");
+commands_file.write("shell echo.\r\n");
 commands_file.close();
 
-print "[+] Pulling required files from device"
+print " [+] Pulling required files from device"
 if isDeviceConnected() :
     if adbFileExists("/system/bin/app_process32"):
         adbPullFile("/system/bin/app_process32", "app_process32")
