@@ -45,9 +45,9 @@ def ensureAdbIsReady():
     subprocess.Popen(command, stdout=subprocess.PIPE).wait();
 
 def adbRunApp(packagename, activity):
-	command = "adb shell am start " + packagename + "/" + packagename + "." + activity
-	subprocess.Popen(command, stdout=subprocess.PIPE).wait();
-	return
+    command = "adb shell am start " + packagename + "/" + packagename + "." + activity
+    subprocess.Popen(command, stdout=subprocess.PIPE).wait();
+    return
 
 def adbFileExists(filename):
     command = "adb shell ls " + filename
@@ -111,22 +111,22 @@ def adbPidOf(packagename):
     proc.wait()
     str = proc.stdout.readline()
     if len(str) is 0:
-    	return None;
+        return None;
     return filter(None, str.split(" "))[1]
 
 def findNdtPath():
-	ndt_path = "";
-	if adbFileExists("/data/data/com.android.ndt/lib/gdbserver.so"):
-		ndt_path = "/data/data/com.android.ndt/lib/"
-	elif adbFileExists("/data/app/com.android.ndt-1/lib/gdbserver.so"):
-		ndt_path = "/data/app/com.android.ndt-1/lib/"
-	elif adbFileExists("/data/app/com.android.ndt-2/lib/gdbserver.so"):
-		ndt_path = "/data/app/com.android.ndt-2/lib/"
-	elif adbFileExists("/data/app/com.android.ndt-3/lib/gdbserver.so"):
-		ndt_path = "/data/app/com.android.ndt-3/lib/"
-	else:
-	    ndt_path = "";
-	return ndt_path;
+    ndt_path = "";
+    if adbFileExists("/data/data/com.android.ndt/lib/gdbserver.so"):
+        ndt_path = "/data/data/com.android.ndt/lib/"
+    elif adbFileExists("/data/app/com.android.ndt-1/lib/gdbserver.so"):
+        ndt_path = "/data/app/com.android.ndt-1/lib/"
+    elif adbFileExists("/data/app/com.android.ndt-2/lib/gdbserver.so"):
+        ndt_path = "/data/app/com.android.ndt-2/lib/"
+    elif adbFileExists("/data/app/com.android.ndt-3/lib/gdbserver.so"):
+        ndt_path = "/data/app/com.android.ndt-3/lib/"
+    else:
+        ndt_path = "";
+    return ndt_path;
 
 print "\r\n[+] Current config:"
 print "    Package name          : " + package_name
@@ -140,13 +140,13 @@ system("adb forward tcp:12345 tcp:12345");
 
 print " [+] Checking whether device is connected"
 if not isDeviceConnected() :
-	print "Error: device disconnected!"
-	sys.exit(0);
+    print "Error: device disconnected!"
+    sys.exit(0);
 
 print " [+] Checking whether application is debuggable"
 if not adbIsDebuggable(package_name):
-	print "\r\n   Error: application is not debuggable"
-	sys.exit(0);
+    print "\r\n   Error: application is not debuggable"
+    sys.exit(0);
 
 print " [+] Checking whether native debugging tools are installed"
 ndt_path = findNdtPath()
@@ -165,7 +165,7 @@ if pid == None:
     print "  [+] Application is not running (debug from start)"
     start_app = True
 else:
-	print "  [+] Pid: " + pid
+    print "  [+] Pid: " + pid
 
 if start_app :
     print "   [+] Creating commands.txt into the device"
@@ -233,4 +233,4 @@ else :
 try:
     subprocess.call(android_ndk_gdb + " -q --command=commands.txt");
 except:
-	sys.exit(0);
+    sys.exit(0);
