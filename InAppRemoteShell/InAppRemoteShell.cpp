@@ -100,7 +100,7 @@ void *InAppRemoteShell::StartService(void*args)
                 client_fd = 0;
                 continue;
             }
-            buffer[1023] = 0x00;
+            buffer[len] = 0x00;
             std::string cmd(buffer);
             Exec(PreprocessCommand(cmd).c_str());
             send(client_fd, "done\r\n", 6, 0);
