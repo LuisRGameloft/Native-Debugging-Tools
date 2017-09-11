@@ -51,10 +51,12 @@ def adbRunApp(packagename, activity):
 
 def adbFileExists(filename):
     command = "adb shell ls " + filename
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE)
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     proc.wait()
     str = proc.stdout.readline()
     if "No such file" in str:
+        return False
+    if len(str) is 0:
         return False
     return True
 
