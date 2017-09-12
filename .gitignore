@@ -2,6 +2,12 @@
 *.ipr
 *.iws
 *.pif
+*.pyc
+perf.data
+perf.report
+commands.txt
+app_process32
+binary_cache
 .ant.properties
 .classpath
 .project
