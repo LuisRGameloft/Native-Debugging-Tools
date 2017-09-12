@@ -94,6 +94,7 @@ void *InAppRemoteShell::StartService(void*args)
         else if(FD_ISSET(client_fd, &readset))
         {
             char buffer[1024];
+            memset(buffer, 0, 1024);
             int len = recv(client_fd, buffer, sizeof buffer-1, 0);
             if(len < 1) {
                 REMOTE_SHELL_LOG("Client disconnected\n" );

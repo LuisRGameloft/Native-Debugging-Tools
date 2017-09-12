@@ -1,7 +1,7 @@
 #
 # MIT License
 # 
-# Copyright (c) 2017 David Landeros
+# Copyright (c) 2017 David Landeros [dh.landeros08@gmail.com]
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,17 +29,23 @@ import time
 import sys
 import os
 
+#
 # Configuration variables
+#
 package_name       = "com.example.openglapp2"
 main_activity      = "OpenGLApp2Activity"
 shared_library_dir = "./../Example/obj/local/"
 android_ndk_gdb    = os.getcwd() + "./desktop/gdb/bin/gdb.exe"
 
+#
 # do not touch these variables
+#
 start_app = False
 ndt_path  = ""
 
+#
 # it defines utils functions
+#
 def ensureAdbIsReady():
     command = "adb start-server"
     subprocess.Popen(command, stdout=subprocess.PIPE).wait();
