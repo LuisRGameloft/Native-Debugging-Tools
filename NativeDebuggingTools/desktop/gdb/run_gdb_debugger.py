@@ -34,7 +34,7 @@ import os
 #
 package_name       = "com.example.openglapp2"
 main_activity      = "OpenGLApp2Activity"
-shared_library_dir = "./../Example/obj/local/"
+shared_library_dir = "../../../Example/obj/local/"
 android_ndk_gdb    = os.environ["ANDROID_NDK_HOME"] + "/prebuilt/windows-x86_64/bin/gdb.exe"
 
 #
