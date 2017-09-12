@@ -159,8 +159,8 @@ if not adbIsDebuggable(package_name):
 print " [+] Checking whether native debugging tools are installed"
 ndt_path = findNdtPath()
 if len(ndt_path) is 0:
-    print "   [+] Installing Native Debugging tools..."
-    system("adb install -r -d ./device/native-debugging-tools.apk")
+    print "     Installing Native Debugging tools..."
+    system("adb install -r -d ./../../device/native-debugging-tools.apk")
     ndt_path = findNdtPath()
     if len(ndt_path) is 0:
         print "Installation failed"
