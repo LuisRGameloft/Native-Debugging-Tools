@@ -1,10 +1,10 @@
 ### Native-Debugging-Tools for Android
 
 ##### NativeDebuggingTools
-Contiene las herramientas para depuracion tanto del lado del device como del lado del host
+Contains the tools and the scripts for both device and desktop
 
-#### InAppRemoteShell
-Archivos cpp y .hpp que deben ser incluidos en el proyecto que se desea depurar (Work around para run-as)
+#### AndroidRemoteExec
+This is a work-around for run-as and should be implemented in the project to be debugged
 
 #### Example
-Aplicacion de ejemplo que implementa InAppRemoteShell y que por lo tanto se pueden utlizar las debugging tools
+Example App that implements AndroidRemoteExec ( accordingly it can be debugged)

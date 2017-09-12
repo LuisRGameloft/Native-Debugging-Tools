@@ -177,7 +177,7 @@ else:
 
 if start_app :
     print "     Creating commands.txt into the device"
-    print "\r\n     IMPORTANT NOTE: It only works if the applications implements InAppRemoteShell"
+    print "\r\n     IMPORTANT NOTE: It only works if the applications implements AndroidRemoteExec"
     adbCreateFile("/sdcard/commands.txt", ndt_path + "gdbserver.so :12345 --attach {PID}")
     adbRunApp(package_name, main_activity);
     time.sleep(2);
@@ -197,12 +197,12 @@ else :
             time.sleep(1);
             s.close();
         else:
-            # print "\r\n   Error: Application doesn't implement InAppRemoteShell"
-            # print "   Read ./InAppRemoteShell/README.md for more info"
+            # print "\r\n   Error: Application doesn't implement AndroidRemoteExec"
+            # print "   Read ./AndroidRemoteExec/README.md for more info"
             exit(1)    
     except:
         print "\r\n   Error: connection failed (127.0.0.1:3435)"
-        print "   Does your application implement InAppRemoteShell ?"
+        print "   Does your application implement AndroidRemoteExec ?"
         print "     if it does, try again or try restarting the app/device"
         exit(1)
 

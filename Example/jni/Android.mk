@@ -18,7 +18,7 @@ LOCAL_SRC_FILES     := ./native.cpp\
                     ./ModelLoader/ModelLoader.cpp\
                     ./InputManager/InputManager.cpp\
                     ./Camera/Camera.cpp\
-                    ../../InAppRemoteShell/InAppRemoteShell.cpp
+                    ../../AndroidRemoteExec/AndroidRemoteExec.cpp
 LOCAL_CFLAGS        += -I $(LOCAL_PATH)
 LOCAL_CFLAGS        += -I "$(CC_COMMON_LIBS)/glm"
 LOCAL_CFLAGS        += -DOS_ANDROID -DANDROID -Wno-write-strings

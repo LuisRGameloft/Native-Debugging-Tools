@@ -2,12 +2,12 @@
 #include <GLES2/gl2.h>
 #include <Scene.hpp>
 
-#include "../../InAppRemoteShell/InAppRemoteShell.hpp"
+#include "../../AndroidRemoteExec/AndroidRemoteExec.hpp"
 
 extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
-    /* This is the InAppRemoteShell implementation */
-    InAppRemoteShell::Init();
+    /* This is the AndroidRemoteExec implementation */
+    AndroidRemoteExec::Init();
     JNIEnv* env;
     if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
         return -1;

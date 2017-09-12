@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "InAppRemoteShell.hpp"
+#include "AndroidRemoteExec.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -32,16 +32,16 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <android/log.h>
-#define REMOTE_SHELL_LOG(...) __android_log_print(ANDROID_LOG_INFO, "InAppRemoteShell", __VA_ARGS__)
+#define REMOTE_SHELL_LOG(...) __android_log_print(ANDROID_LOG_INFO, "AndroidRemoteExec", __VA_ARGS__)
 
-int  InAppRemoteShell::s_iPort = 3435;
-char InAppRemoteShell::s_sPid[10] = "";
+int  AndroidRemoteExec::s_iPort = 3435;
+char AndroidRemoteExec::s_sPid[10] = "";
 
 /* THIS METHOD MUST BE CALLED FROM JNI_OnLoad(...)
  *  - Reads and execute "/sdcard/commands.txt" if exists
  *  - Creates the posix thread to start listening for remote commands
  */
-void InAppRemoteShell::Init()
+void AndroidRemoteExec::Init()
 {
     int pid = getpid();
     sprintf(s_sPid, "%i", pid);
@@ -65,7 +65,7 @@ void InAppRemoteShell::Init()
     pthread_create(&thread, NULL, StartService, NULL);
 }
 
-void *InAppRemoteShell::StartService(void*args)
+void *AndroidRemoteExec::StartService(void*args)
 {
     int client_fd = 0;
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -109,7 +109,7 @@ void *InAppRemoteShell::StartService(void*args)
     }
 }
 
-std::string& InAppRemoteShell::PreprocessCommand(std::string& cmd)
+std::string& AndroidRemoteExec::PreprocessCommand(std::string& cmd)
 {
     size_t pos = cmd.find("{PID}");
     if(pos != std::string::npos)
@@ -120,7 +120,7 @@ std::string& InAppRemoteShell::PreprocessCommand(std::string& cmd)
     return cmd.append(" 2>&1");
 }
 
-void InAppRemoteShell::Exec(const char *cmd)
+void AndroidRemoteExec::Exec(const char *cmd)
 {
     if (fork() == 0)
     {

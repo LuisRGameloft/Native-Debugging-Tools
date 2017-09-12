@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 #include <string>
-class InAppRemoteShell
+class AndroidRemoteExec
 {
     public:
         static void Init();

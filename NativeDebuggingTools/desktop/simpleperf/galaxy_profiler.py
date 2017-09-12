@@ -183,8 +183,8 @@ try :
     time.sleep(1)
     s.close()
 except:
-    print "\r\n   Error: connection failed (127.0.0.1:3435)"
-    print "   Does your application implement InAppRemoteShell ?"
+    print "\r\n     Error: connection failed (127.0.0.1:3435)"
+    print "  Does your application implement AndroidRemoteExec ?"
     print "     if it does, try again or try restarting the app/device"
     exit(1)
 print " [+] Profiling in progress ... "
