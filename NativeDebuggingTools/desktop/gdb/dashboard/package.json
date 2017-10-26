@@ -1,0 +1,8 @@
+{
+    "name"   : "GDB Dashboard",
+    "main"   : "app.html",
+    "window" : {
+    	"width" : 1000,
+    	"height" : 600
+    }
+}
