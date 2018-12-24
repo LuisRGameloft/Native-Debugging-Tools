@@ -1,3 +1,4 @@
+@echo off
 rem Please rename as config.bat in current folder
 
 rem Native Debug Config
