@@ -70,9 +70,13 @@ def adbFileExists(filename):
     return True
 
 def adbCreateFile(filename, content) :
-    command = adb_tool + " shell echo " + content + " > " + filename
+    f = open("commands.txt","w")
+    f.write(content)
+    f.close()
+    command = adb_tool + " push commands.txt " + filename
     proc = subprocess.Popen(command)
     proc.wait()
+    os.remove("commands.txt")
 
 def adbDeleteFile(filename) :
     command = adb_tool + " shell rm " + filename
