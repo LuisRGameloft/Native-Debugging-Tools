@@ -37,6 +37,7 @@ package_name       = os.environ["PACKAGE_NAME"]
 main_activity      = os.environ["ACTIVITY_NAME"]
 shared_library_dir = os.environ["SHARED_LIB_PATH"]
 android_ndk_gdb    = os.environ["NDK_PATH"] + "/prebuilt/windows-x86_64/bin/gdb.exe"
+adb_tool           = os.environ["ADB_PATH"] + "/adb.exe"
 os.environ["NDT_FOLDER"] = os.getcwd()
 
 #
@@ -49,16 +50,16 @@ ndt_path  = ""
 # it defines utils functions
 #
 def ensureAdbIsReady():
-    command = "adb start-server"
+    command = adb_tool + " start-server "
     subprocess.Popen(command, stdout=subprocess.PIPE).wait();
 
 def adbRunApp(packagename, activity):
-    command = "adb shell am start " + packagename + "/" + activity
+    command = adb_tool + " shell am start " + packagename + "/" + activity
     subprocess.Popen(command, stdout=subprocess.PIPE).wait();
     return
 
 def adbFileExists(filename):
-    command = "adb shell ls " + filename
+    command = adb_tool + " shell ls " + filename
     proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     proc.wait()
     str = proc.stdout.readline()
@@ -69,22 +70,22 @@ def adbFileExists(filename):
     return True
 
 def adbCreateFile(filename, content) :
-    command = "adb shell echo " + content + " > " + filename
+    command = adb_tool + " shell echo " + content + " > " + filename
     proc = subprocess.Popen(command)
     proc.wait()
 
 def adbDeleteFile(filename) :
-    command = "adb shell rm " + filename
+    command = adb_tool + " shell rm " + filename
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     proc.wait()
 
 def adbPullFile(src, dst) :
-    command = "adb pull " + src + " " + dst
+    command = adb_tool + " pull " + src + " " + dst
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     proc.wait()
 
 def adbIsDebuggable(packagename) :
-    command = "adb shell run-as " + packagename + " echo yes"
+    command = adb_tool + " shell run-as " + packagename + " echo yes"
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     proc.wait()
     str = proc.stdout.readline()
@@ -97,7 +98,7 @@ def system(command):
     proc.wait()
 
 def isDeviceConnected() :
-    command = "adb devices"
+    command = adb_tool + " devices"
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     proc.wait()
     str = proc.stdout.readline()
@@ -107,7 +108,7 @@ def isDeviceConnected() :
     return False
 
 def isDeviceX86():
-    command = "adb shell getprop ro.product.cpu.abilist"
+    command = adb_tool + " shell getprop ro.product.cpu.abilist"
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     proc.wait()
     str = proc.stdout.readline()
@@ -116,7 +117,7 @@ def isDeviceX86():
     return False
 
 def adbPidOf(packagename):
-    command = "adb shell ps | grep " + packagename
+    command = adb_tool + " shell ps | grep " + packagename
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     proc.wait()
     str = proc.stdout.readline()
