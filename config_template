@@ -1,0 +1,6 @@
+rem Native Debug Config
+set PYTHON_PATH=
+set NDK_PATH=
+set SHARED_LIB_PATH=
+set PACKAGE_NAME=
+set ACTIVITY_NAME=
