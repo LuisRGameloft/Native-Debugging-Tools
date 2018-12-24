@@ -28,14 +28,15 @@ import socket
 import time
 import sys
 import os
+from shutil import copyfile
 
 #
 # Configuration variables
 #
-package_name       = "com.example.openglapp2"
-main_activity      = "OpenGLApp2Activity"
-shared_library_dir = "../../../Example/obj/local/"
-android_ndk_gdb    = os.environ["ANDROID_NDK_HOME"] + "/prebuilt/windows-x86_64/bin/gdb.exe"
+package_name       = os.environ["PACKAGE_NAME"]
+main_activity      = os.environ["ACTIVITY_NAME"]
+shared_library_dir = os.environ["SHARED_LIB_PATH"]
+android_ndk_gdb    = os.environ["NDK_PATH"] + "/prebuilt/windows-x86_64/bin/gdb.exe"
 os.environ["NDT_FOLDER"] = os.getcwd()
 
 #
@@ -52,7 +53,7 @@ def ensureAdbIsReady():
     subprocess.Popen(command, stdout=subprocess.PIPE).wait();
 
 def adbRunApp(packagename, activity):
-    command = "adb shell am start " + packagename + "/" + packagename + "." + activity
+    command = "adb shell am start " + packagename + "/" + activity
     subprocess.Popen(command, stdout=subprocess.PIPE).wait();
     return
 
@@ -210,10 +211,10 @@ else :
 #  creating commands.txt file for gdb client 
 print " [+] Creating configuration for Gdb client"
 if isDeviceX86() :
-    subprocess.call("cp .gdbinit " + shared_library_dir + "/x86/.gdbinit");
+    copyfile(".gdbinit", shared_library_dir + "/x86/.gdbinit")
     os.chdir(shared_library_dir + "/x86/")
 else:
-    subprocess.call("cp .gdbinit " + shared_library_dir + "/armeabi-v7a/.gdbinit");
+    copyfile(".gdbinit", shared_library_dir + "/armeabi-v7a/.gdbinit")
     os.chdir(shared_library_dir + "/armeabi-v7a/")
 if os.path.exists("commands.txt") :
     os.remove("commands.txt")
