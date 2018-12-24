@@ -156,7 +156,8 @@ print " [+] Checking whether device is connected"
 if not isDeviceConnected() :
     print "Error: device disconnected!"
     sys.exit(0);
-system("adb forward tcp:12345 tcp:12345");
+commandSys = adb_tool + ' forward tcp:12345 tcp:12345'
+system(commandSys);
 
 print " [+] Checking whether application is debuggable"
 if not adbIsDebuggable(package_name):
@@ -167,7 +168,8 @@ print " [+] Checking whether native debugging tools are installed"
 ndt_path = findNdtPath()
 if len(ndt_path) is 0:
     print "     Installing Native Debugging tools..."
-    system("adb install -r -d ./../../device/native-debugging-tools.apk")
+    commandSys = adb_tool + ' install -r -d ./../../device/native-debugging-tools.apk'
+    system(commandSys)
     ndt_path = findNdtPath()
     if len(ndt_path) is 0:
         print "Installation failed"
@@ -191,7 +193,8 @@ if start_app :
     adbDeleteFile("/sdcard/commands.txt");
 else :
     print " [+] Connecting to remote process"
-    system("adb forward tcp:3435 tcp:3435");
+    commandSys = adb_tool + ' forward tcp:3435 tcp:3435'
+    system(commandSys);
     s = None
     try :
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
