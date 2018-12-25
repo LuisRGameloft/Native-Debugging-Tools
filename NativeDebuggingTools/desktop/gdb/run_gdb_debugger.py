@@ -187,10 +187,10 @@ else:
 if start_app :
     print "     Creating commands.txt into the device"
     print "\r\n     IMPORTANT NOTE: It only works if the applications implements AndroidRemoteExec"
-    adbCreateFile("/sdcard/commands.txt", ndt_path + "gdbserver.so :12345 --attach {PID}")
+    adbCreateFile("/data/local/tmp/commands.txt", ndt_path + "gdbserver.so :12345 --attach {PID}")
     adbRunApp(package_name, main_activity);
     time.sleep(2);
-    #adbDeleteFile("/sdcard/commands.txt");
+    adbDeleteFile("/data/local/tmp/commands.txt");
 else :
     print " [+] Connecting to remote process"
     commandSys = adb_tool + ' forward tcp:3435 tcp:3435'
