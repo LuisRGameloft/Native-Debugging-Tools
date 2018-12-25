@@ -126,7 +126,7 @@ namespace AndroidRemoteExec {
 #endif		
 	}
 	
-	void Init(JavaVM* vm)
+	void Init()
 	{
 #if __ANDROID__
 		int pid = getpid();
