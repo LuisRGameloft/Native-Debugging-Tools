@@ -190,7 +190,7 @@ if start_app :
     adbCreateFile("/sdcard/commands.txt", ndt_path + "gdbserver.so :12345 --attach {PID}")
     adbRunApp(package_name, main_activity);
     time.sleep(2);
-    adbDeleteFile("/sdcard/commands.txt");
+    #adbDeleteFile("/sdcard/commands.txt");
 else :
     print " [+] Connecting to remote process"
     commandSys = adb_tool + ' forward tcp:3435 tcp:3435'
