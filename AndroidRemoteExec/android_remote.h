@@ -47,8 +47,10 @@
 	char * __android_remote_append_str (const char *curr_str, const char *new_str)
 	{
 		char *result_str = NULL;
-		int new_size = strlen(curr_str) + strlen(new_str) + 1;
-		if ((result_str = (char*) malloc(new_size)) != NULL) {
+		int new_size = 0;
+		new_size = strlen(curr_str) + strlen(new_str) + 1;
+		if ((result_str = (char*) malloc(new_size)) != NULL) 
+		{
 			memset(result_str, 0, new_size);
 			strcat(result_str, curr_str);
 			strcat(result_str, new_str);
