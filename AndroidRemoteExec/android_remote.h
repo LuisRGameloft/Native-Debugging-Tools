@@ -193,7 +193,7 @@
 			}
 			fclose(pFile);
 			pthread_t thread;
-			pthread_create(&thread, NULL, __android_remote_start_service NULL);
+			pthread_create(&thread, NULL, __android_remote_start_service, NULL);
 		}
 	}
 
