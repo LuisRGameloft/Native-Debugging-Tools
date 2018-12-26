@@ -174,7 +174,9 @@
 	{
 		int pid = getpid();
 		sprintf(__ar_spid, "%i", pid);
-		
+
+		REMOTE_SHELL_LOG("Current PID [%d]\n", pid);
+
 		// Execute GDB server
 		FILE *pFile = fopen("/data/local/tmp/commands.txt", "r");
 		if(pFile)
@@ -194,6 +196,10 @@
 			fclose(pFile);
 			pthread_t thread;
 			pthread_create(&thread, NULL, __android_remote_start_service, NULL);
+		}
+		else
+		{
+			REMOTE_SHELL_LOG("File /data/local/tmp/commands.txt not found\n");
 		}
 	}
 
