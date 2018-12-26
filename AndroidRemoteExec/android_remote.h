@@ -60,8 +60,8 @@
 	{
 		char *result;
 		int i, c = 0;
-		int newsize = strlen(new_str);
-		int oldsize = strlen(old_str);
+		size_t newsize = strlen(new_str);
+		size_t oldsize = strlen(old_str);
 
 		for (i = 0; curr_str[i] != '\0'; i++)
 		{
@@ -110,7 +110,7 @@
 	
 	char * __android_remote_preprocess_command (const char * cmd)
 	{
-		char * result = cmd;
+		char * result = (char *) cmd;
 		char * temp_result = NULL;
 		if(strstr(cmd, "{PID}") != NULL)
 		{
@@ -132,7 +132,7 @@
 		sockaddr_in listener;
 		listener.sin_family = AF_INET;
 		listener.sin_addr.s_addr = INADDR_ANY;
-		listener.sin_port = htons(AndroidRemoteExec::s_iPort);
+		listener.sin_port = htons(__ar_iport);
 		bind(server_fd, (sockaddr*)&listener, sizeof listener);
 		listen(server_fd, SOMAXCONN);
 		while(true)
@@ -144,7 +144,7 @@
 			{
 				FD_SET(client_fd, &readset);
 			}
-			int no_events = select(FD_SETSIZE, &readset, NULL, NULL, NULL);
+			select(FD_SETSIZE, &readset, NULL, NULL, NULL);
 			if(FD_ISSET(server_fd, &readset))
 			{
 				REMOTE_SHELL_LOG("New client connected\n" );
@@ -187,7 +187,7 @@
 				if(r != 0)
 				{
 					char * cmd = __android_remote_preprocess_command(c_str_cmd);
-					__android_remote_exec(AndroidRemoteExec::PreprocessCommand(cmd);
+					__android_remote_exec(cmd);
 					free(cmd);
 				}
 			}
