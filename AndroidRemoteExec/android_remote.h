@@ -24,7 +24,10 @@
  
 #ifndef ANDROID_REMOVE_EXEC_H_
 #define ANDROID_REMOVE_EXEC_H_
-  
+
+#if __ANDROID__			
+
+#include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -34,20 +37,61 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <string>
-#include <jni.h>
 #include <android/log.h> 
 
-#define REMOTE_SHELL_LOG(...) __android_log_print(ANDROID_LOG_INFO, "AndroidRemoteExec", __VA_ARGS__)
+#define REMOTE_SHELL_LOG(...) __android_log_print(ANDROID_LOG_INFO, "android_remote", __VA_ARGS__)
 
-namespace AndroidRemoteExec {
+	int  __ar_iport 	= 3435;
+	char __ar_spid[10]	= "";
 
-	int  s_iPort = 3435;
-	char s_sPid[10] = "";
-
-	void Exec(const char *cmd)
+	char * __android_remote_append_str (const char *curr_str, const char *new_str)
 	{
-#if __ANDROID__			
+		char *result_str = NULL;
+		int new_size = strlen(curr_str) + strlen(new_str) + 1;
+		if ((result_str = (char*) malloc(new_size)) != NULL) {
+			memset(result_str, 0, new_size);
+			strcat(result_str, curr_str);
+			strcat(result_str, new_str);
+		}
+		return result_str;
+	}
+
+	char * __android_remote_replace_str (const char *curr_str, const char *old_str, const char *new_str)
+	{
+		char *result;
+		int i, c = 0;
+		int newsize = strlen(new_str);
+		int oldsize = strlen(old_str);
+
+		for (i = 0; curr_str[i] != '\0'; i++)
+		{
+			if (strstr(&curr_str[i], old_str) == &curr_str[i])
+			{
+				c++;
+				i += oldsize - 1;
+			}
+		}
+		result = (char *) malloc(i + c * (newsize - oldsize) + 1);
+		i = 0;
+		while (*curr_str)
+		{
+			if (strstr(curr_str, old_str) == curr_str)
+			{
+				strcpy(&result[i], new_str);
+				i += newsize;
+				curr_str += oldsize;
+			}
+			else
+			{
+				result[i++] = *curr_str++;
+			}
+		}
+		result[i] = '\0';
+		return result;
+	}
+
+	void __android_remote_exec (const char *cmd)
+	{
 		if (fork() == 0)
 		{
 			FILE *fp;
@@ -62,27 +106,27 @@ namespace AndroidRemoteExec {
 			pclose(fp);
 			exit(0); // exit child process
 		}
-#endif		
 	}
 	
-	std::string& PreprocessCommand(std::string& cmd)
+	char * __android_remote_preprocess_command (const char * cmd)
 	{
-#if __ANDROID__		
-		size_t pos = cmd.find("{PID}");
-		if(pos != std::string::npos)
+		char * result = cmd;
+		char * temp_result = NULL;
+		if(strstr(cmd, "{PID}") != NULL)
 		{
-			cmd.replace(pos, 5, AndroidRemoteExec::s_sPid);
+			result = temp_result = __android_remote_replace_str (cmd, "{PID}", __ar_spid);
 		}
-		REMOTE_SHELL_LOG(">>> %s",cmd.c_str());
-		return cmd.append(" 2>&1");
-#else
-		return (std::string(""));
-#endif		
+		result = __android_remote_append_str (result, " 2>&1");
+		if(temp_result)
+		{
+			free(temp_result);
+		}
+		REMOTE_SHELL_LOG(">>> %s", result);
+		return result;
 	}
 	
-	void *StartService(void* args)
+	void * __android_remote_start_service (void* args)
 	{
-#if __ANDROID__		
 		int client_fd = 0;
 		int server_fd = socket(AF_INET, SOCK_STREAM, 0);
 		sockaddr_in listener;
@@ -118,19 +162,18 @@ namespace AndroidRemoteExec {
 					continue;
 				}
 				buffer[len] = 0x00;
-				std::string cmd(buffer);
-				AndroidRemoteExec::Exec(AndroidRemoteExec::PreprocessCommand(cmd).c_str());
+				char * cmd = __android_remote_preprocess_command(buffer);
+				__android_remote_exec(cmd);
+				free(cmd);
 				send(client_fd, "done\r\n", 6, 0);
 			}
 		}
-#endif		
 	}
 	
-	void Init()
+	void __android_remote_init ()
 	{
-#if __ANDROID__
 		int pid = getpid();
-		sprintf(AndroidRemoteExec::s_sPid, "%i", pid);
+		sprintf(__ar_spid, "%i", pid);
 		
 		// Execute GDB server
 		FILE *pFile = fopen("/data/local/tmp/commands.txt", "r");
@@ -143,16 +186,18 @@ namespace AndroidRemoteExec {
 				r = fscanf(pFile, "%99[^\n]", c_str_cmd);
 				if(r != 0)
 				{
-					std::string cmd(c_str_cmd);
-					AndroidRemoteExec::Exec(AndroidRemoteExec::PreprocessCommand(cmd).c_str());
+					char * cmd = __android_remote_preprocess_command(c_str_cmd);
+					__android_remote_exec(AndroidRemoteExec::PreprocessCommand(cmd);
+					free(cmd);
 				}
 			}
 			fclose(pFile);
+			pthread_t thread;
+			pthread_create(&thread, NULL, __android_remote_start_service NULL);
 		}
-		pthread_t thread;
-		pthread_create(&thread, NULL, AndroidRemoteExec::StartService, NULL);
-#endif		
 	}
-}	
 
-#endif //ANDROID_REMOVE_EXEC_H_
+#undef REMOTE_SHELL_LOG
+
+#endif // __ANDROID__
+#endif // ANDROID_REMOVE_EXEC_H_
