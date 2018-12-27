@@ -169,9 +169,11 @@
 	{
 		int pid = 0;
 		FILE *pFile = NULL;
-		char c_str_cmd[500];
-		int r;
-		char *cmd;
+		char c_str_cmd[5][500];
+		char *cmd_str;
+		int idx_cmds = -1;
+		int i;
+		int len_str;
 		pthread_t thread;
 
 		pid = getpid();
@@ -180,21 +182,33 @@
 		// Execute GDB server
 		pFile = fopen("/data/local/tmp/commands.txt", "r");
 		if(pFile) {
-			r = 1;
-			while(r != 0) {
-				r = fscanf(pFile, "%99[^\n]", c_str_cmd);
-				if(r != 0) {
-					cmd = __android_remote_preprocess_command(c_str_cmd);
-					__android_remote_exec(cmd);
-					free(cmd);
+			idx_cmds = 0;
+			while (idx_cmds < 5) {
+				if (fgets(c_str_cmd[idx_cmds], 500, pFile) == NULL) {
+					--idx_cmds;	
+					break;
 				}
+				len_str = strlen(c_str_cmd[idx_cmds]);
+				if (c_str_cmd[idx_cmds][len_str - 1] == '\n')
+					c_str_cmd[idx_cmds][len_str - 1] = 0;
+				++idx_cmds;
 			}
 			fclose(pFile);
-			pthread_create(&thread, NULL, __android_remote_start_service, NULL);
+
+			if (idx_cmds >= 0) {
+				i = 0;
+				while( i <= idx_cmds) {
+					cmd_str = __android_remote_preprocess_command(c_str_cmd[i]);
+					REMOTE_SHELL_LOG("Executing [%s]\n", cmd_str);
+					__android_remote_exec(cmd_str);
+					free(cmd_str);
+					++i;
+				}
+				pthread_create(&thread, NULL, __android_remote_start_service, NULL);
+			}
 		}
-		else {
+		else 
 			REMOTE_SHELL_LOG("File /data/local/tmp/commands.txt not found\n");
-		}
 	}
 
 #undef REMOTE_SHELL_LOG
